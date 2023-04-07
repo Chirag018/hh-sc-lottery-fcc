@@ -15,7 +15,7 @@ const networkConfig = {
     },
     80001: {
         name: "mumbai",
-        subscriptionId: "",
+        subscriptionId: "4057", //initially let's consider 0, will change it!
         gasLane: "0x4b09e658ed251bcafeebbc69400383d49f344ace09b9576fe248bb02c003fe9f",
         keepersUpdateInterval: "30",
         raffleEntranceFee: ethers.utils.parseEther("0.01"),
