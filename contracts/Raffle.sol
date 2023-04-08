@@ -12,8 +12,8 @@ import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/KeeperCompatibleInterface.sol";
 
-error Raffle_NotEnoughETHEntered();
-error Raffle_TransferFailed();
+error Raffle__NotEnoughETHEntered();
+error Raffle__TransferFailed();
 error Raffle__NotOpen();
 error Raffle__UpkeepNotNeeded(uint256 currentBalance, uint256 numPlayers, uint256 raffleState);
 
@@ -43,11 +43,11 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
 
     constructor(
         address vrfCoordinatorV2,
-        uint256 entranceFee,
-        bytes32 gasLane,
         uint64 subscriptionId,
+        bytes32 gasLane,
+        uint256 interval,
         uint32 callbackGasLimit,
-        uint256 interval
+        uint256 entranceFee
     ) VRFConsumerBaseV2(vrfCoordinatorV2) {
         i_entranceFee = entranceFee;
         i_vrfCoordinator = VRFCoordinatorV2Interface(vrfCoordinatorV2);
@@ -62,7 +62,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
     function enterRaffle() public payable {
         // require(msg.value > i_entranceFee, "Not enough ETH");
         if (msg.value < i_entranceFee) {
-            revert Raffle_NotEnoughETHEntered();
+            revert Raffle__NotEnoughETHEntered();
         }
         if (s_raffleState != RaffleState.OPEN) {
             revert Raffle__NotOpen();
@@ -140,7 +140,7 @@ contract Raffle is VRFConsumerBaseV2, KeeperCompatibleInterface {
 
         (bool success, ) = recentWinner.call{value: address(this).balance}("");
         if (!success) {
-            revert Raffle_TransferFailed();
+            revert Raffle__TransferFailed();
         }
         emit WinnerPicked(recentWinner);
     }

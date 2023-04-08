@@ -14,9 +14,18 @@ const MUMBAISCAN_API_KEY = process.env.MUMBAISCAN_API_KEY;
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   defaultNetwork: "hardhat",
+  namedAccounts: {
+    deployer: {
+      default: 0,
+    },
+    player: {
+      default: 1,
+    },
+  },
   networks: {
     hardhat: {
       chainId: 31337,
+      blockConfirmation: 1,
     },
     mumbai: {
       url: MUMBAI_RPC_URL,

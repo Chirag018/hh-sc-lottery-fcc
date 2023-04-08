@@ -5,12 +5,12 @@ const { developmentChains } = require("../../helper-hardhat-config")
 developmentChains.includes(network.name)
     ? describe.skip
     : describe("Raffle Staging Tests", function () {
-        let raffle, raffleEntranceFee, deployer
+        let raffle, entranceFee, deployer
 
         beforeEach(async function () {
             deployer = (await getNamedAccounts()).deployer
             raffle = await ethers.getContract("Raffle", deployer)
-            raffleEntranceFee = await raffle.getEntranceFee()
+            entranceFee = await raffle.getEntranceFee()
         })
 
         describe("fulfillRandomWords", function () {
@@ -38,7 +38,7 @@ developmentChains.includes(network.name)
                             assert.equal(raffleState, 0)
                             assert.equal(
                                 winnerEndingBalance.toString(),
-                                winnerStartingBalance.add(raffleEntranceFee).toString()
+                                winnerStartingBalance.add(entranceFee).toString()
                             )
                             assert(endingTimeStamp > startingTimeStamp)
                             resolve()
@@ -49,7 +49,7 @@ developmentChains.includes(network.name)
                     })
                     // Then entering the raffle
                     console.log("Entering Raffle...")
-                    const tx = await raffle.enterRaffle({ value: raffleEntranceFee })
+                    const tx = await raffle.enterRaffle({ value: entranceFee })
                     await tx.wait(1)
                     console.log("Ok, time to wait...")
                     const winnerStartingBalance = await accounts[0].getBalance()
