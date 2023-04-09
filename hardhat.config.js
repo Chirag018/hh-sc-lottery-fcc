@@ -34,11 +34,11 @@ module.exports = {
       blockConfirmation: 6,
     }
   },
-  etherscan: {
-    apiKey: {
-      mumbai: MUMBAISCAN_API_KEY,
-    },
-  },
+  // etherscan: {
+  //   apiKey: {
+  //     mumbai: MUMBAISCAN_API_KEY,
+  //   },
+  // },
   solidity: "0.8.7",
   etherscan: {
     apiKey: MUMBAISCAN_API_KEY,

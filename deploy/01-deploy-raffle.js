@@ -33,17 +33,17 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
         : VERIFICATION_BLOCK_CONFIRMATIONS
 
     log("----------------------------------------------------")
-    const arguments = [
+    const args = [
         vrfCoordinatorV2Address,
         subscriptionId,
         networkConfig[chainId]["gasLane"],
-        networkConfig[chainId]["keepersUpdateInterval"],
-        networkConfig[chainId]["raffleEntranceFee"],
+        networkConfig[chainId]["interval"],
         networkConfig[chainId]["callbackGasLimit"],
+        networkConfig[chainId]["entranceFee"],
     ]
     const raffle = await deploy("Raffle", {
         from: deployer,
-        args: arguments,
+        args: args,
         log: true,
         waitConfirmations: waitBlockConfirmations,
     })
@@ -55,9 +55,9 @@ module.exports = async ({ getNamedAccounts, deployments }) => {
     }
 
     // Verify the deployment
-    if (!developmentChains.includes(network.name) && process.env.ETHERSCAN_API_KEY) {
+    if (!developmentChains.includes(network.name) && process.env.MUMBAISCAN_API_KEY) {
         log("Verifying...")
-        await verify(raffle.address, arguments)
+        await verify(raffle.address, args)
     }
 
     log("Enter lottery with command:")
